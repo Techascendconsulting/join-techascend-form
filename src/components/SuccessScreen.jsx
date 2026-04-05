@@ -1,42 +1,21 @@
-import { useEffect, useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
-import { supabase } from '../lib/supabase'
 import { useIsMobile } from '../hooks/useIsMobile'
+
+/** Always works without Supabase. Override in Vercel: VITE_WHATSAPP_GROUP_LINK */
+const DEFAULT_WHATSAPP_GROUP =
+  'https://chat.whatsapp.com/EjMa1pW13ib1OOAITnCOXj?mode=gi_t'
+
+function getWhatsappUrl() {
+  const fromEnv = import.meta.env.VITE_WHATSAPP_GROUP_LINK
+  if (typeof fromEnv === 'string' && fromEnv.trim()) {
+    return fromEnv.trim()
+  }
+  return DEFAULT_WHATSAPP_GROUP
+}
 
 export function SuccessScreen() {
   const isMobile = useIsMobile()
-  const [whatsappUrl, setWhatsappUrl] = useState(null)
-  const [linkStatus, setLinkStatus] = useState('loading')
-
-  useEffect(() => {
-    let cancelled = false
-    ;(async () => {
-      if (!supabase) {
-        setLinkStatus('error')
-        setWhatsappUrl(null)
-        return
-      }
-      const { data, error } = await supabase
-        .from('settings')
-        .select('value')
-        .eq('key', 'whatsapp_group_link')
-        .maybeSingle()
-
-      if (cancelled) return
-      if (error || !data?.value) {
-        setLinkStatus('error')
-        setWhatsappUrl(null)
-        return
-      }
-      setWhatsappUrl(data.value)
-      setLinkStatus('ready')
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  const linkReady = linkStatus === 'ready' && whatsappUrl && whatsappUrl !== '#'
+  const whatsappUrl = getWhatsappUrl()
 
   return (
     <div className="success-page" role="status" aria-live="polite">
@@ -50,16 +29,7 @@ export function SuccessScreen() {
       </div>
 
       <div className="success-page__cta">
-        {linkStatus === 'loading' && (
-          <p className="success-page__muted">Loading WhatsApp link…</p>
-        )}
-        {linkStatus === 'error' && (
-          <p className="success-page__muted">
-            WhatsApp link isn’t available right now. We’ll follow up with you
-            shortly.
-          </p>
-        )}
-        {linkReady && isMobile && (
+        {isMobile && (
           <a
             className="success-page__btn"
             href={whatsappUrl}
@@ -69,17 +39,27 @@ export function SuccessScreen() {
             Join WhatsApp Group
           </a>
         )}
-        {linkReady && !isMobile && (
-          <div className="success-page__qr">
-            <QRCodeSVG
-              value={whatsappUrl}
-              size={200}
-              level="M"
-              includeMargin
-              bgColor="var(--surface)"
-              fgColor="var(--text-heading)"
-            />
-          </div>
+        {!isMobile && (
+          <>
+            <div className="success-page__qr">
+              <QRCodeSVG
+                value={whatsappUrl}
+                size={200}
+                level="M"
+                includeMargin
+                bgColor="var(--surface)"
+                fgColor="var(--text-heading)"
+              />
+            </div>
+            <a
+              className="success-page__link-open"
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open WhatsApp group
+            </a>
+          </>
         )}
       </div>
 

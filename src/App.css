@@ -125,6 +125,21 @@
   height: auto;
 }
 
+.success-page__link-open {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  touch-action: manipulation;
+}
+
+.success-page__link-open:hover {
+  color: var(--accent-hover);
+}
+
 .success-page__closing {
   margin: 0;
   font-size: 0.875rem;
