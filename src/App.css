@@ -1,8 +1,22 @@
 .page {
   width: 100%;
-  max-width: 32rem;
+  max-width: min(32rem, 100%);
   margin: 0 auto;
   padding: clamp(1.25rem, 5vw, 3.5rem) clamp(1rem, 4vw, 1.5rem) clamp(2rem, 6vw, 3rem);
+  box-sizing: border-box;
+}
+
+/* Wider form on tablet/laptop so choice cards aren’t squeezed into a 512px column */
+@media (min-width: 640px) {
+  .page {
+    max-width: min(42rem, calc(100vw - 2rem));
+  }
+}
+
+@media (min-width: 1024px) {
+  .page {
+    max-width: min(48rem, calc(100vw - 3rem));
+  }
 }
 
 /* Full-viewport success state — no form header/footer */
@@ -163,6 +177,12 @@
   display: flex;
   flex-direction: column;
   gap: 1.375rem;
+}
+
+@media (min-width: 1024px) {
+  .form {
+    gap: 1.5rem;
+  }
 }
 
 .form__error {
@@ -499,25 +519,49 @@
   color: var(--text-soft);
 }
 
+.choice-grid--training {
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+/* Equal-height cards in a row */
+.choice-grid--training .choice {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .choice-grid--training .choice__card {
-  min-height: 5rem;
+  flex: 1;
+  width: 100%;
+  min-height: 5.25rem;
+  align-items: flex-start;
 }
 
 .choice-grid--training .choice__title {
   font-size: 0.875rem;
 }
 
-.choice-grid--training {
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 640px) {
+/* Three equal columns on large enough screens (no 2+1 orphan row). 768–899px: stacked, wider page. */
+@media (min-width: 900px) {
   .choice-grid--training {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
   }
 
-  .choice-grid--training .choice:last-child {
-    grid-column: 1 / -1;
+  .choice-grid--training .choice__title {
+    font-size: 0.9375rem;
+  }
+
+  .choice-grid--training .choice__hint {
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+
+  .choice-grid--training .choice__icon {
+    width: 2.625rem;
+    height: 2.625rem;
   }
 }
 
