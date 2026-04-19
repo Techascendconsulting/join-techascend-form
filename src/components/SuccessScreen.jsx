@@ -19,12 +19,13 @@ export function SuccessScreen() {
 
   return (
     <div className="success-page" role="status" aria-live="polite">
-      <h1 className="success-page__headline">Application received</h1>
+      <h1 className="success-page__headline">You&apos;re in — thanks</h1>
 
       <div className="success-page__message">
-        <p>We’ve received your application.</p>
+        <p>We&apos;ve got your details.</p>
         <p>
-          Join the WhatsApp group to continue. All updates will be shared there.
+          Join the WhatsApp group for the free 2-week experience. Updates and next steps will be
+          shared there.
         </p>
       </div>
 
@@ -64,8 +65,7 @@ export function SuccessScreen() {
       </div>
 
       <p className="success-page__closing">
-        Our team will review your application and reach out to you shortly via
-        WhatsApp.
+        Our team will review your response and reach out shortly via WhatsApp.
       </p>
     </div>
   )
