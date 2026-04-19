@@ -501,7 +501,7 @@ export default function FormPage() {
           </div>
 
           <button type="submit" className="submit" disabled={submitting}>
-            {submitting ? 'Sending…' : 'Send my details'}
+            {submitting ? 'Sending…' : 'Start free 2-week access'}
           </button>
         </form>
       </main>
